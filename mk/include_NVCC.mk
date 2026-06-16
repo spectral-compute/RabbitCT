@@ -8,7 +8,8 @@ endif
 ENABLE_CUDA = true
 
 VERSION  = --version
-CFLAGS   = -O3 -std=c++17 $(OPENMP) -g
+CFLAGS   = -O3 $(OPENMP) -g
+NVCCFLAGS= -std=c++17
 LFLAGS   = $(OPENMP)
 DEFINES  = -DENABLE_CUDA -D_GNU_SOURCE
 INCLUDES =
