@@ -53,6 +53,9 @@ endif
 
 ifeq ($(ENABLE_CUDA),true)
 OBJ       += $(patsubst $(SRC_DIR)/%.cu, $(BUILD_DIR)/%.o,$(wildcard $(SRC_DIR)/*.cu))
+ifneq ($(ENABLE_CUDA_TEX),true)
+OBJ       := $(filter-out $(BUILD_DIR)/LolaCUDATex.o,$(OBJ))
+endif
 endif
 
 # Select assembly kernel matching the SIMD option.
