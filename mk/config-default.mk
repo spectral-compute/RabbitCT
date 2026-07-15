@@ -4,6 +4,7 @@ ENABLE_OPENMP ?= false
 ENABLE_LIKWID ?= false
 ENABLE_ISPC ?= false
 ENABLE_CUDA ?= false
+ENABLE_HIP ?= false
 
 #Feature options
 SIMD ?= SSE

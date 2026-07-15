@@ -58,6 +58,13 @@ OBJ       := $(filter-out $(BUILD_DIR)/LolaCUDATex.o,$(OBJ))
 endif
 endif
 
+ifeq ($(ENABLE_HIP),true)
+OBJ       += $(patsubst $(SRC_DIR)/%.hip, $(BUILD_DIR)/%.o,$(wildcard $(SRC_DIR)/*.hip))
+ifneq ($(ENABLE_HIP_TEX),true)
+OBJ       := $(filter-out $(BUILD_DIR)/LolaHIPTex.o,$(OBJ))
+endif
+endif
+
 # Select assembly kernel matching the SIMD option.
 # SSE/AVX/AVX512 require x86-64; NEON requires AARCH64.
 ARCH := $(shell uname -m)
@@ -106,6 +113,11 @@ $(BUILD_DIR)/%.o:  %.c $(MAKE_DIR)/include_$(TOOLCHAIN).mk config.mk
 	$(Q)$(CC) $(CPPFLAGS) -MT $(@:.d=.o) -MM  $< > $(BUILD_DIR)/$*.d
 
 $(BUILD_DIR)/%.o:  %.cu $(MAKE_DIR)/include_$(TOOLCHAIN).mk config.mk
+	$(info ===>  COMPILE  $@)
+	$(CC) -c $(CPPFLAGS) $(CFLAGS) $(NVCCFLAGS) $< -o $@
+	$(Q)$(CC) $(CPPFLAGS) -MT $(@:.d=.o) -MM  $< > $(BUILD_DIR)/$*.d
+
+$(BUILD_DIR)/%.o:  %.hip $(MAKE_DIR)/include_$(TOOLCHAIN).mk config.mk
 	$(info ===>  COMPILE  $@)
 	$(CC) -c $(CPPFLAGS) $(CFLAGS) $(NVCCFLAGS) $< -o $@
 	$(Q)$(CC) $(CPPFLAGS) -MT $(@:.d=.o) -MM  $< > $(BUILD_DIR)/$*.d
